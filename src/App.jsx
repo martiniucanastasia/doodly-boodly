@@ -1,4 +1,9 @@
 import { useEffect, useState } from "react";
+import {
+  countHorizontalLines,
+  countVerticalLines,
+  countDiagonalLines,
+} from "./utils/utils";
 import "./App.css";
 
 function App() {
@@ -7,6 +12,7 @@ function App() {
     .map(() => Array(6).fill("E"));
 
   // TODO: move the state into the localStorage
+  const [playerLines, setPlayerLines] = useState({ R: 0, Y: 0 });
   const [grid, setGrid] = useState(emptyGrid);
   const [currentPlayer, setCurrentPlayer] = useState("R");
   const [gameOver, setGameOver] = useState(false);
@@ -15,6 +21,20 @@ function App() {
     // Check for win or draw conditions
     // Update gameOver state if necessary
     // Check for the current player's turn
+
+    const redLines =
+      countHorizontalLines(grid, "R", 4) +
+      countVerticalLines(grid, "R", 4) +
+      countDiagonalLines(grid, "R", 4);
+
+    const yellowLines =
+      countHorizontalLines(grid, "Y", 4) +
+      countVerticalLines(grid, "Y", 4) +
+      countDiagonalLines(grid, "Y", 4);
+
+    console.log("check");
+    setPlayerLines({ R: redLines, Y: yellowLines });
+
     const isFull = grid.every((row) => row.every((cell) => cell !== "E"));
     if (isFull) {
       setGameOver(true);
@@ -61,7 +81,44 @@ function App() {
   return (
     <>
       <div>
-        <h1>doddly-boodly</h1>
+        <h1 style={{ margin: 0 }}>doddly-boodly</h1>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "120px",
+            padding: "20px 0",
+          }}
+        >
+          <span
+            style={{
+              backgroundColor: "#EB5353",
+              width: "100px",
+              height: "40px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "50%",
+              fontWeight: "700",
+            }}
+          >
+            {playerLines.R}
+          </span>
+          <span
+            style={{
+              backgroundColor: "#F9D923",
+              width: "100px",
+              height: "40px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "50%",
+              fontWeight: "700",
+            }}
+          >
+            {playerLines.Y}
+          </span>
+        </div>
         <div>
           <div
             style={{
