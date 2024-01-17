@@ -66,9 +66,10 @@ function App() {
           <div
             style={{
               display: "flex",
-              border: "1px solid royalblue",
+              border: "1px solid #187498",
               padding: "0.5rem",
-              backgroundColor: "royalblue",
+              backgroundColor: "#187498",
+              borderRadius: "5%",
             }}
           >
             {grid.map((row, rowIndex) => {
@@ -77,34 +78,36 @@ function App() {
                   <button
                     onClick={() => placeDisc(rowIndex)}
                     style={{
-                      fontSize: "10px",
+                      fontSize: "12px",
                       padding: "0.25rem 0.5rem",
-                      border: "0.5px solid purple",
                     }}
                   >
-                    row:{rowIndex}
+                    row: {rowIndex + 1}
                   </button>
                   <br />
                   <br />
                   {row.map((cell, cellIndex) => {
                     return (
                       <div
+                        onClick={() => placeDisc(rowIndex)}
                         key={`cell${cellIndex}`}
                         style={{
-                          width: "25px",
-                          height: "25px",
+                          cursor: "pointer",
+                          width: "70px",
+                          height: "70px",
                           padding: "0.25rem 0.5rem",
-                          border: "3px solid royalblue",
+                          border: "3px solid #187498",
                           backgroundColor:
                             cell === "R" && cell !== "E"
-                              ? "red"
+                              ? "#EB5353"
                               : cell === "Y" && cell !== "E"
-                              ? "yellow"
+                              ? "#F9D923"
                               : "white",
                           borderRadius: "50%",
                         }}
                       >
-                        {cell !== "E" ? cell : null}
+                        {/* cel */}
+                        {cell !== "E" ? " " : null}
                       </div>
                     );
                   })}
@@ -117,9 +120,9 @@ function App() {
               style={{
                 color:
                   currentPlayer === "R" && currentPlayer !== "E"
-                    ? "red"
+                    ? "#EB5353"
                     : currentPlayer === "Y" && currentPlayer !== "E"
-                    ? "yellow"
+                    ? "#F9D923"
                     : null,
               }}
             >
@@ -127,7 +130,17 @@ function App() {
             </h3>
           </div>
         </div>
-        <button onClick={resetGame}>Reset Game</button>
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
+          <button onClick={resetGame} style={{ color: "#36AE7C" }}>
+            Reset Game
+          </button>
+          <button
+            onClick={() => console.log("Modal")}
+            style={{ color: "#36AE7C" }}
+          >
+            Game Rules
+          </button>
+        </div>
       </div>
     </>
   );
