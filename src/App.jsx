@@ -4,7 +4,11 @@ import {
   countVerticalLines,
   countDiagonalLines,
 } from "./utils/utils";
+import { IModal } from "./components/Modal";
+import Modal from "react-modal";
 import "./App.css";
+
+Modal.setAppElement("#root");
 
 function App() {
   const emptyGrid = Array(7)
@@ -16,12 +20,10 @@ function App() {
   const [grid, setGrid] = useState(emptyGrid);
   const [currentPlayer, setCurrentPlayer] = useState("R");
   const [gameOver, setGameOver] = useState(false);
+  const [isGameOverModalOpen, setIsGameOverModalOpen] = useState(false);
+  const [isRulesModalOpen, setIsRulesModalOpen] = useState(false);
 
   useEffect(() => {
-    // Check for win or draw conditions
-    // Update gameOver state if necessary
-    // Check for the current player's turn
-
     const redLines =
       countHorizontalLines(grid, "R", 4) +
       countVerticalLines(grid, "R", 4) +
@@ -32,18 +34,17 @@ function App() {
       countVerticalLines(grid, "Y", 4) +
       countDiagonalLines(grid, "Y", 4);
 
-    console.log("check");
     setPlayerLines({ R: redLines, Y: yellowLines });
+
+    if (gameOver) {
+      setIsGameOverModalOpen(true);
+    }
 
     const isFull = grid.every((row) => row.every((cell) => cell !== "E"));
     if (isFull) {
       setGameOver(true);
-      // TODO: add modal instead of alert
-      setTimeout(() => {
-        resetGame();
-      }, 1000);
     }
-  }, [grid]);
+  }, [grid, gameOver]);
 
   // Function to place a disc in a column
   function placeDisc(row) {
@@ -62,8 +63,6 @@ function App() {
         return newGrid;
       }
 
-      console.log("rendered", suitableCell);
-
       newGrid[row][suitableCell] = currentPlayer;
 
       setCurrentPlayer(currentPlayer === "R" ? "Y" : "R");
@@ -71,16 +70,31 @@ function App() {
     });
   }
 
+  const handleClose = () => {
+    setIsRulesModalOpen(false);
+  };
+
   // Reset the game
   function resetGame() {
     setGrid(emptyGrid);
     setCurrentPlayer("R");
     setGameOver(false);
+    setIsGameOverModalOpen(false);
   }
 
   return (
     <>
       <div>
+        <IModal
+          isOpen={isGameOverModalOpen}
+          onClose={resetGame}
+          buttonContent={"Play Again"}
+          winContent={true}
+          winner={playerLines.R}
+          loser={playerLines.Y}
+          winnerResult={playerLines.R}
+          loserResult={playerLines.Y}
+        />
         <h1 style={{ margin: 0 }}>doddly-boodly</h1>
         <div
           style={{
@@ -192,11 +206,17 @@ function App() {
             Reset Game
           </button>
           <button
-            onClick={() => console.log("Modal")}
+            onClick={() => setIsRulesModalOpen(true)}
             style={{ color: "#36AE7C" }}
           >
             Game Rules
           </button>
+          <IModal
+            isOpen={isRulesModalOpen}
+            onClose={handleClose}
+            buttonContent={"Close"}
+            rulesContent={true}
+          />
         </div>
       </div>
     </>
