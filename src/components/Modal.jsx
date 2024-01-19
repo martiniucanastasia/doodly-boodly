@@ -46,16 +46,25 @@ const RulesComponent = () => {
   );
 };
 
-// const WinComponent = (winner, winnerResult, loser, loserResult) => {
-//   return (
-//     <>
-//       <div>
-//         {winner} reach {winnerResult}
-//         {loser} reach {loserResult}
-//       </div>
-//     </>
-//   );
-// };
+const WinComponent = ({ playerLines }) => {
+  let winner = null;
+  let maxScore = Math.max(...Object.values(playerLines));
+
+  Object.keys(playerLines).forEach((key) => {
+    if (playerLines[key] === maxScore) winner = key;
+  });
+
+  return (
+    <>
+      <div style={{ color: "black" }}>
+        Congratulations, <b>{winner}</b>!
+        <p>
+          You won with score <b>{maxScore}</b>
+        </p>
+      </div>
+    </>
+  );
+};
 
 export const IModal = ({
   isOpen,
@@ -63,10 +72,7 @@ export const IModal = ({
   rulesContent,
   winContent,
   buttonContent,
-  winner,
-  winnerResult,
-  loser,
-  loserResult,
+  playerLines,
 }) => {
   return (
     <Modal
@@ -75,16 +81,9 @@ export const IModal = ({
       style={customStyles}
       contentLabel="Example Modal"
     >
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
         {rulesContent && <RulesComponent />}
-        {winContent && (
-          <span style={{ color: "black" }}>
-            {winner} reach {winnerResult}
-            <br />
-            {loser} reach {loserResult}
-          </span>
-        )}
-
+        {winContent && <WinComponent playerLines={playerLines} />}
         <button onClick={onClose}>{buttonContent}</button>
       </div>
     </Modal>
@@ -97,13 +96,14 @@ IModal.propTypes = {
   buttonContent: PropTypes.node.isRequired,
   rulesContent: PropTypes.bool,
   winContent: PropTypes.bool,
-  winner: PropTypes.number,
-  winnerResult: PropTypes.number,
-  loser: PropTypes.number,
-  loserResult: PropTypes.number,
+  playerLines: PropTypes.object,
 };
 
 IModal.defaultProps = {
   rulesContent: null,
   winContent: null,
+};
+
+WinComponent.propTypes = {
+  playerLines: PropTypes.object,
 };
