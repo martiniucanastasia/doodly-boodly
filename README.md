@@ -1,8 +1,10 @@
-doodly-boodly
+### doodly-boodly
+
+The doodly-boodly game is a classic strategy game in which 2 players go head-to-head in a battle to own the grid! Players choose yellow or red chips. They drop the chips into the grid, starting in the middle or at the edge to stack their colored discs upwards, horizontally, or diagonally.
 
 ## Deployed URL
 
-???
+https://doodly-boodly.vercel.app/
 
 ## Quick Start
 
